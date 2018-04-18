@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# run combined csv and jnas data
+
 # Copyright  2015 Tokyo Institute of Technology
 #                 (Authors: Takafumi Moriya, Tomohiro Tanaka and Takahiro Shinozaki)
 #            2015 Mitsubishi Electric Research Laboratories (Author: Shinji Watanabe)
