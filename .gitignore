@@ -2,6 +2,7 @@
 s5/local
 s5/steps
 s5/utils
+s5/conf
 s5/run.sh
 ## csj data, mfcc and experiemnts
 s5/data
