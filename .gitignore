@@ -1,0 +1,20 @@
+## original scripts from kaldi
+s5/local
+s5/steps
+s5/utils
+s5/run.sh
+## csj data, mfcc and experiemnts
+s5/data
+s5/exp
+s5/mfcc
+## jnas data, mfcc and experiemnts
+s5/jnas_data
+s5/jnas_exp
+s5/jnas_mfcc
+## RESULTS files
+RESULTS_marta
+RESULTS_jnas
+## log output files
+*.out
+*.log
+
