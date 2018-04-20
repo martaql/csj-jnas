@@ -4,11 +4,11 @@
 . ./path.sh
 set -e # exit on error
 
-stage=5
+stage=7
 
-csj_exp=exp
+csj_exp=csj_exp
 jnas_exp=jnas_exp
-csj_data=data
+csj_data=csj_data
 jnas_data=jnas_data
 lang_dir=$csj_data/lang
 
@@ -41,10 +41,10 @@ if  [ $stage -eq 3 ]; then
     done
 fi
 
-data_train=$jnas_data/csj_jnas_train
+data_train=$jnas_data/train_csj_jnas
 ## Combine csj and jnas train data
 if [ $stage -eq 4 ]; then
-    utils/combine_data.sh $data_train $csj_data/train_nodup $jnas_data/train \
+    utils/combine_data.sh $data_train $csj_data/train_nodup $jnas_data/train_jnas \
       || { echo "Failed to combine data"; exit 1; }
     #utils/data/remove_dup_utts.sh 300 data/wsj_librispeech100 $data_dir/wsj_librispeech100_nodup
 fi
@@ -58,10 +58,12 @@ if [ $stage -eq 5 ]; then
 
     steps/train_sat.sh  --cmd "$train_cmd" \
       11500 200000 $data_train $csj_data/lang $jnas_exp/tri3_ali_nodup $jnas_exp/tri4
+fi
+
+if [ $stage -eq 6 ]; then
 
     graph_dir=$jnas_exp/tri4/graph_csj_tg
-    $train_cmd $graph_dir/mkgraph.log \
-        utils/mkgraph.sh data/lang_csj_tg exp/tri4 $graph_dir
+    utils/mkgraph.sh $csj_data/lang_csj_tg $jnas_exp/tri4 $graph_dir
 
     for test_num in JNAS_testset_100 JNAS_testset_500 ; do
         steps/decode_fmllr.sh --nj 10 --cmd "$decode_cmd" --config conf/decode.config \
@@ -70,14 +72,29 @@ if [ $stage -eq 5 ]; then
 
     for eval_num in eval1 eval2 eval3 ; do
         steps/decode_fmllr.sh --nj 10 --cmd "$decode_cmd" --config conf/decode.config \
-            $graph_dir $csj_data/$eval_num $jnas_exp/tri4/decode_${eval_num}_csj_tg
+            $graph_dir $jnas_data/$eval_num $jnas_exp/tri4/decode_${eval_num}_csj_tg
     done
 
 fi
 
+if [ $stage -eq 7 ]; then
+
+    # nnet3 TDNN+Chain 
+    jnas_local/chain/run_tdnn.sh
+
+fi
 
 
-
+if [ $stage -le 8 ]; then
+     #Find Best WER
+    test_list="JNAS_testset_100 JNAS_testset_500 eval1 eval2 eval3"
+    for test_num in $test_ist; do
+        echo "=== evaluation set $test_num ===" ;
+        for x in jnas_exp/{tri4,chain*/*}/decode_${test_num}*; do
+	    [ -d $x ] && grep WER $x/wer_* | utils/best_wer.sh; 
+	done
+    done > RESULTS_jnas
+fi
 
 
 

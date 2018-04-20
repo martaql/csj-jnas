@@ -8,6 +8,9 @@ s5/run.sh
 s5/data
 s5/exp
 s5/mfcc
+s5/csj_data
+s5/csj_exp
+s5/csj_mfcc
 ## jnas data, mfcc and experiemnts
 s5/jnas_data
 s5/jnas_exp
