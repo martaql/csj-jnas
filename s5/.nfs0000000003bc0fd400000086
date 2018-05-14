@@ -22,14 +22,14 @@ data_dir=jnas_data
 # language models:
 online_nnet3_lm_type=combined
 #lm_types="jnas_tg"
-lm_types="jnas_tg"
+lm_types="csj_tg"
 #lm_types="csj_tg jnas_tg"
 #lm_types="jnas_tg combined_tg csj_tg"
 #lm_types="nosp_jnas_tg nosp_combined_tg nosp_csj_tg"
 
 # acoustic models:
-am_types="tri4_csj"
-#am_types="tri5_combined"
+#am_types="tri4_csj"
+am_types="tri5_combined"
 #am_types="tri5_combined"
 #am_types="tri4_combined tri4_csj tri4_jnas"
 
@@ -38,13 +38,13 @@ am_types="tri4_csj"
 #gmm_type=tri4_combined
 #exp_dir=jnas_exp/${gmm_type}
 nnet3_gmm_type=tdnn_lstm1a_sp
-nnet3_dir=jnas_exp/nnet3_csj
+nnet3_dir=jnas_exp/nnet3
 nnet3_exp_dir=$nnet3_dir/${nnet3_gmm_type}
 
 # Test sets to evaluate models on:
-#test_list="JNAS_testset_100 JNAS_testset_500 eval1 eval2 eval3"
+test_list="JNAS_testset_100 JNAS_testset_500 eval1 eval2 eval3"
 #test_list="JNAS_testset_100 JNAS_testset_500"
-test_list="eval1 eval2 eval3"
+#test_list="eval1 eval2 eval3"
 #test_list="JNAS_testset_100 JNAS_testset_500 eval2 eval3"
 #test_list="JNAS_testset_100"
 #test_list="eval1"

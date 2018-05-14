@@ -16,9 +16,13 @@ s5/jnas_data
 s5/jnas_exp
 s5/jnas_mfcc
 ## RESULTS files
-RESULTS_marta
+#RESULTS_marta
+#RESULTS_marta2
 RESULTS_jnas
+RESULTS_jnas_old
+RESULTS
 ## log output files
+*.tmp
 *.out
 *.log
 

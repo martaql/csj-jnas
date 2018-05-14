@@ -42,16 +42,18 @@ if [ $stage -le 1 ]; then
   # the normal data to get the alignment _sp stands for speed-perturbed
   echo "$0: preparing directory for low-resolution speed-perturbed data (for alignment)"
   utils/data/perturb_data_dir_speed_3way.sh $jnas_data/${train_set} $jnas_data/${train_set}_sp
-  echo "$0: making MFCC featuresfor low-resolution speed-perturbed data"
-  steps/make_mfcc.sh --cmd "$train_cmd" --nj 50 $jnas_data/${train_set}_sp || exit 1;
+  echo "$0: making MFCC features for low-resolution speed-perturbed data"
+  #(nj=50 originally)
+  steps/make_mfcc.sh --cmd "$train_cmd" --nj 10 $jnas_data/${train_set}_sp || exit 1;
   steps/compute_cmvn_stats.sh $jnas_data/${train_set}_sp || exit 1;
   utils/fix_data_dir.sh $jnas_data/${train_set}_sp
 fi
 
 if [ $stage -le 2 ]; then
+  #(nj=50 originally)
   echo "$0: aligning with the perturbed low-resolution data"
-  steps/align_fmllr.sh --nj 50 --cmd "$train_cmd" \
-    $jnas_data/${train_set}_sp $csj_data/lang $gmm_dir $ali_dir || exit 1;
+  steps/align_fmllr.sh --nj 10 --cmd "$train_cmd" \
+    $jnas_data/${train_set}_sp $jnas_data/lang_combined $gmm_dir $ali_dir || exit 1;
 fi
 
 if [ $stage -le 3 ]; then
@@ -71,9 +73,10 @@ if [ $stage -le 3 ]; then
   # features; this helps make trained nnets more invariant to test data volume
   utils/data/perturb_data_dir_volume.sh $jnas_data/${train_set}_sp_hires || exit 1;
 
-  # generate high-resolution MFCC feautres
+  # generate high-resolution MFCC features
+  #(nj=50 originally)
   for datadir in ${train_set}_sp $dev_set ${test_sets}; do
-    steps/make_mfcc.sh --nj 50 --mfcc-config conf/mfcc_hires.conf \
+    steps/make_mfcc.sh --nj 10 --mfcc-config conf/mfcc_hires.conf \
       --cmd "$train_cmd" $jnas_data/${datadir}_hires || exit 1;
     steps/compute_cmvn_stats.sh $jnas_data/${datadir}_hires || exit 1;
     utils/fix_data_dir.sh $jnas_data/${datadir}_hires || exit 1;
@@ -101,7 +104,8 @@ if [ $stage -le 4 ]; then
 
   echo "$0: training the diagonal UBM."
   # Use 512 Gaussians in the UBM.
-  steps/online/nnet2/train_diag_ubm.sh --cmd "$train_cmd" --nj 50 \
+  #(nj=50 originally)
+  steps/online/nnet2/train_diag_ubm.sh --cmd "$train_cmd" --nj 10 \
     --num-frames 500000 --num-threads 8 \
     ${temp_data_root}/${train_set}_sp_hires_subset 512 \
     $jnas_exp/nnet3${nnet3_affix}/pca_transform $jnas_exp/nnet3${nnet3_affix}/diag_ubm
@@ -112,7 +116,8 @@ if [ $stage -le 5 ]; then
   # can be sensitive to the amount of data. The script defaults to an iVector dimension of 100
   # even though $nj is just 10, each job uses multiple processes and threads.
   echo "$0: training the iVector extractor"
-  steps/online/nnet2/train_ivector_extractor.sh --cmd "$train_cmd" --nj 50 \
+  #(nj=50 originally)
+  steps/online/nnet2/train_ivector_extractor.sh --cmd "$train_cmd" --nj 10 \
     $jnas_data/${train_set}_sp_hires $jnas_exp/nnet3${nnet3_affix}/diag_ubm \
     $jnas_exp/nnet3${nnet3_affix}/extractor || exit 1;
 fi
@@ -138,13 +143,15 @@ if [ $stage -le 6 ]; then
   utils/data/modify_speaker_info.sh --utts-per-spk-max 2 \
     $jnas_data/${train_set}_sp_hires ${temp_data_root}/${train_set}_sp_hires_max2
 
-  steps/online/nnet2/extract_ivectors_online.sh --cmd "$train_cmd" --nj 50 \
+  #(nj=50 originally)
+  steps/online/nnet2/extract_ivectors_online.sh --cmd "$train_cmd" --nj 10 \
     ${temp_data_root}/${train_set}_sp_hires_max2 \
     $jnas_exp/nnet3${nnet3_affix}/extractor $ivectordir
 
   # Also extract iVectors for the test data, but in this case we don't need the speed
   # perturbation (sp).
   for datadir in $dev_set $test_sets; do
+    #(nj=50 originally)
     steps/online/nnet2/extract_ivectors_online.sh --cmd "$train_cmd" --nj 10 \
       $jnas_data/${datadir}_hires $jnas_exp/nnet3${nnet3_affix}/extractor \
       $jnas_exp/nnet3${nnet3_affix}/ivectors_${datadir}_hires

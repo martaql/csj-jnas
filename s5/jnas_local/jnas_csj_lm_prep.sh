@@ -1,37 +1,41 @@
 #!/bin/bash
 
-stage=2
+stage=0
 
 transdir=/home/ubuntu/jnas_pp/data/Final	#/JNAS_trainset
-textdest=jnas_data/train_lm
+textdest=jnas_data/train_lm_combined
 
 data_dir=jnas_data
-lm_dir=jnas_data/local/lm
-dict_dir=jnas_data/local/dict_nosp
-lang_dir=jnas_data/lang_nosp
-lang_dir_tmp=jnas_data/local/lang_nosp_tmp
-test_lang_dir=jnas_data/lang_nosp_jnas_tg
+lm_dir=jnas_data/local/lm_combined
+dict_dir=jnas_data/local/dict_nosp_combined
+lang_dir=jnas_data/lang_nosp_combined
+lang_dir_tmp=jnas_data/local/lang_nosp_combined_tmp
+test_lang_dir=jnas_data/lang_nosp_combined_tg
 
 . ./path.sh
 
 export LC_ALL=C;
 
 if [ $stage -eq -1 ]; then
-  rm -rf $textdest
-  mkdir -p $textdest
-  #cat $transdir/JNAS_testset_*/female_*_final.txt |sort > $textdest/text1
-  #cat $transdir/JNAS_trainset/*_final.txt |sort > $textdest/text2
-  #cat $textdest/text* |sort > $textdest/text
-  cat $transdir/JNAS_trainset_LM/*_final.txt |sort > $textdest/text
-fi
-
-if [ $stage -eq 0 ]; then
   rm -rf $dict_dir
   mkdir -p $dict_dir
-  cp data/local/dict_nosp/{extra_questions,nonsilence_phones,optional_silence,silence_phones,lexicon}.txt $dict_dir
+  cat csj_data/local/dict_nosp/lexicon.txt |sort > $dict_dir/lexicon_csj.txt
+  cat jnas_data/local/dict_nosp/lexicon.txt |sort > $dict_dir/lexicon_jnas.txt
+  cat $dict_dir/lexicon_* |sort | uniq > $dict_dir/lexicon.txt
+  cp jnas_data/local/dict_nosp/{extra_questions,nonsilence_phones,optional_silence,silence_phones}.txt $dict_dir
 fi
 
-if [ $stage -eq 1 ]; then
+
+if [ $stage -eq 0 ]; then
+  rm -rf $textdest
+  mkdir -p $textdest
+  cat csj_data/local/train/text |sort > $textdest/text_csj
+  cat jnas_data/train_lm_jnas/text |sort > $textdest/text_jnas
+  cat $textdest/text_* |sort > $textdest/text
+fi
+
+
+if [ $stage -le 1 ]; then
   rm -rf $lm_dir
   mkdir -p $lm_dir/{tmp,}
   text=$textdest/text

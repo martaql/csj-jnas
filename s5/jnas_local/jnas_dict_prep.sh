@@ -3,7 +3,7 @@
 . ./path.sh
 
 #srcdir=~/jnas_pp/data/Final/JNAS_testset_100_withLex
-srcdir=~/jnas_pp/data/Final/JNAS_trainset
+srcdir=~/jnas_pp/data/Final/JNAS_trainset_LM
 outd=jnas_data/local/dict_tmp
 
 
@@ -13,6 +13,7 @@ if [ ! -e $outd/.done_make_lexicon ]; then
   (
     lexicon=$outd
     #rm -f $outd/lexicon/lexicon.txt
+    rm -rf $lexicon
     mkdir -p $lexicon
     cat $srcdir/*_lex.txt | grep -v "+ー" | grep -v "++" | grep -v "×" > $lexicon/lexicon.txt
     #cat $lexicon/lexicon0.txt > $lexicon/lexicon.txt
@@ -20,6 +21,8 @@ if [ ! -e $outd/.done_make_lexicon ]; then
     local/csj_make_trans/vocab2dic.pl -p local/csj_make_trans/kana2phone -e $lexicon/ERROR_v2d -o $lexicon/lexicon.txt $lexicon/lexicon_htk.txt
     cut -d'+' -f1,3- $lexicon/lexicon.txt >$lexicon/lexicon_htk.txt
     cut -f1,3- $lexicon/lexicon_htk.txt | perl -ape 's:\t: :g' >$lexicon/lexicon.txt
+
+    python jnas_local/filter_jnas_lexicon.py $outd
 
     if [ -s $lexicon/lexicon.txt ] ;then
       echo -n >$outd/.done_make_lexicon
@@ -33,8 +36,9 @@ fi
 
 srcdir=$outd	#jnas_data/local/dict_tmp
 dir=jnas_data/local/dict_nosp
+rm -rf $dir
 mkdir -p $dir
-srcdict=$srcdir/lexicon.txt
+srcdict=$srcdir/lexicon1.txt
 
 # assume csj_data_prep.sh was done already.
 [ ! -f "$srcdict" ] && echo "No such file $srcdict" && exit 1;

@@ -51,14 +51,17 @@ set -e -o pipefail
 
 # First the options that are passed through to run_ivector_common.sh
 # (some of which are also used in this script directly).
-stage=0
-nj=30
-train_set=train_nodup
-test_sets="eval1 eval2 eval3"
-gmm=tri4        # this is the source gmm-dir that we'll use for alignments; it
-                 # should have alignments for the specified training data.
+stage=8
+nj=20
+train_set=train_csj_jnas
+test_sets="JNAS_testset_100 JNAS_testset_500 eval1 eval2 eval3"
+# this is the source gmm-dir that we'll use for alignments; it
+# should have alignments for the specified training data.
+#gmm=tri4 #copy of tri4_combined
+gmm=tri5 #copy of tri5_combined
 num_threads_ubm=32
-nnet3_affix=       # affix for exp dirs, e.g. it was _cleaned in tedlium.
+nnet3_affix=   # affix for exp directory.
+
 
 # Options which are not passed through to run_ivector_common.sh
 affix=1a  #affix for TDNN+LSTM directory e.g. "1a" or "1b", in case we change the configuration.
@@ -93,23 +96,31 @@ where "nvcc" is installed.
 EOF
 fi
 
-local/nnet3/run_ivector_common.sh \
+local_dir=jnas_local
+$local_dir/nnet3/run_ivector_common_new.sh \
   --stage $stage --nj $nj \
   --train-set $train_set --gmm $gmm \
   --num-threads-ubm $num_threads_ubm \
   --nnet3-affix "$nnet3_affix"
 
+data=jnas_data
+exp=jnas_exp
+#jnas_data=jnas_data
+#jnas_exp=jnas_exp
+#csj_data=csj_data
 
 
-gmm_dir=exp/${gmm}
-ali_dir=exp/${gmm}_ali_${train_set}_sp
-lang=data/lang
-dir=exp/nnet3${nnet3_affix}/tdnn_lstm${affix}_sp
-train_data_dir=data/${train_set}_sp_hires
-train_ivector_dir=exp/nnet3${nnet3_affix}/ivectors_${train_set}_sp_hires
+gmm_dir=$exp/${gmm}
+ali_dir=$exp/${gmm}_ali_${train_set}_sp
+lang=$data/lang_combined
+dir=$exp/nnet3${nnet3_affix}/tdnn_lstm${affix}_sp
+train_data_dir=$data/${train_set}_sp_hires
+train_ivector_dir=$exp/nnet3${nnet3_affix}/ivectors_${train_set}_sp_hires
 
+# First time I trained with tri4_combined_old/graph_csj_tg (I think?)
+# Second time I  will train with tri5_combined/graph_combined_tg
 for f in $train_data_dir/feats.scp $train_ivector_dir/ivector_online.scp \
-    $gmm_dir/graph_csj_tg/HCLG.fst \
+    $gmm_dir/graph_combined_tg/HCLG.fst \
     $ali_dir/ali.1.gz $gmm_dir/final.mdl; do
   [ ! -f $f ] && echo "$0: expected file $f to exist" && exit 1
 done
@@ -144,15 +155,16 @@ if [ $stage -le 12 ]; then
   output-layer name=output input=lstm3 output-delay=$label_delay dim=$num_targets max-change=1.5
 
 EOF
+
   steps/nnet3/xconfig_to_configs.py --xconfig-file $dir/configs/network.xconfig --config-dir $dir/configs/
 fi
 
 
+# Train tdnn-lstm on jnas+csj training data
 if [ $stage -le 13 ]; then
-  if [[ $(hostname -f) == *.clsp.jhu.edu ]] && [ ! -d $dir/egs/storage ]; then
-    utils/create_split_dir.pl \
-     /export/b0{3,4,5,6}/$USER/kaldi-data/egs/tedlium-$(date +'%m_%d_%H_%M')/s5_r2/$dir/egs/storage $dir/egs/storage
-  fi
+
+    #--trainer.optimization.num-jobs-initial=3 \
+    #--trainer.optimization.num-jobs-final=10 \
 
   steps/nnet3/train_rnn.py --stage=$train_stage \
     --cmd="$decode_cmd" \
@@ -163,8 +175,8 @@ if [ $stage -le 13 ]; then
     --trainer.num-epochs=6 \
     --trainer.deriv-truncate-margin=10 \
     --trainer.samples-per-iter=20000 \
-    --trainer.optimization.num-jobs-initial=3 \
-    --trainer.optimization.num-jobs-final=10 \
+    --trainer.optimization.num-jobs-initial=1 \
+    --trainer.optimization.num-jobs-final=1 \
     --trainer.optimization.initial-effective-lrate=0.0003 \
     --trainer.optimization.final-effective-lrate=0.00003 \
     --trainer.optimization.shrink-value 0.99 \
@@ -183,18 +195,16 @@ if [ $stage -le 13 ]; then
     --lang=$lang \
     --reporting.email="$reporting_email" \
     --dir=$dir  || exit 1;
+
 fi
 
-if [ $stage -le 14 ]; then
-  frames_per_chunk=$(echo $chunk_width | cut -d, -f1)
-  rm $dir/.error 2>/dev/null || true
-
-  for data in $test_sets; do
-    (
+if [ $stage -eq 14 ]; then
+  #frames_per_chunk=$(echo $chunk_width | cut -d, -f1)
+  for test_set in $test_sets; do
       frames_per_chunk=$(echo $chunk_width | cut -d, -f1)
-      data_affix=$(echo $data | sed s/test_//)
-      nj=$(wc -l <data/${data}_hires/spk2utt)
-      for lmtype in csj_tg; do
+      #data_affix=$(echo $test_set | sed s/test_//)
+      nj=$(wc -l <$data/${test_set}_hires/spk2utt)
+      for lmtype in combined_tg; do
         graph_dir=$gmm_dir/graph_${lmtype}
         steps/nnet3/decode.sh \
           --extra-left-context $chunk_left_context \
@@ -203,21 +213,13 @@ if [ $stage -le 14 ]; then
           --extra-right-context-final 0 \
           --frames-per-chunk $frames_per_chunk \
           --nj $nj --cmd "$decode_cmd"  --num-threads 4 \
-          --online-ivector-dir exp/nnet3${nnet3_affix}/ivectors_${data}_hires \
-          $graph_dir data/${data}_hires ${dir}/decode_${lmtype}_${data_affix} || exit 1
+          --online-ivector-dir $exp/nnet3${nnet3_affix}/ivectors_${test_set}_hires \
+          $graph_dir $data/${test_set}_hires ${dir}/decode_${test_set}_${lmtype} || exit 1
       done
-      #steps/lmrescore.sh --cmd "$decode_cmd" data/lang_test_{tgpr,tg} \
-      #  data/${data}_hires ${dir}/decode_{tgpr,tg}_${data_affix} || exit 1
-      #steps/lmrescore_const_arpa.sh --cmd "$decode_cmd" \
-      #  data/lang_test_bd_{tgpr,fgconst} \
-      # data/${data}_hires ${dir}/decode_${lmtype}_${data_affix}{,_fg} || exit 1
-    ) || touch $dir/.error &
   done
-  wait
-  [ -f $dir/.error ] && echo "$0: there was a problem while decoding" && exit 1
 fi
 
-if [ $stage -le 15 ]; then
+if [ $stage -eq 15 ]; then
   # 'looped' decoding.
   # note: you should NOT do this decoding step for setups that have bidirectional
   # recurrence, like BLSTMs-- it doesn't make sense and will give bad results.
@@ -226,61 +228,39 @@ if [ $stage -le 15 ]; then
   # we just hardcode the --frames-per-chunk option as it doesn't have to
   # match any value used in training, and it won't affect the results (unlike
   # regular decoding).
-  rm $dir/.error 2>/dev/null || true
-
-  for data in $test_sets; do
-    (
-      data_affix=$(echo $data | sed s/test_//)
-      nj=$(wc -l <data/${data}_hires/spk2utt)
-      for lmtype in csj_tg; do
+  for test_set in $test_sets; do
+      #data_affix=$(echo $test_set | sed s/test_//)
+      nj=$(wc -l <$data/${test_set}_hires/spk2utt)
+      for lmtype in combined_tg; do
         graph_dir=$gmm_dir/graph_${lmtype}
         steps/nnet3/decode_looped.sh \
           --frames-per-chunk 30 \
           --nj $nj --cmd "$decode_cmd" \
-          --online-ivector-dir exp/nnet3${nnet3_affix}/ivectors_${data}_hires \
-          $graph_dir data/${data}_hires ${dir}/decode_looped_${lmtype}_${data_affix} || exit 1
+          --online-ivector-dir $exp/nnet3${nnet3_affix}/ivectors_${test_set}_hires \
+          $graph_dir $data/${test_set}_hires ${dir}/decode_looped_${test_set}_${lmtype} || exit 1
       done
-      #steps/lmrescore.sh --cmd "$decode_cmd" data/lang_test_{tgpr,tg} \
-      #  data/${data}_hires ${dir}/decode_looped_{tgpr,tg}_${data_affix} || exit 1
-      #steps/lmrescore_const_arpa.sh --cmd "$decode_cmd" \
-      #  data/lang_test_bd_{tgpr,fgconst} \
-      # data/${data}_hires ${dir}/decode_looped_${lmtype}_${data_affix}{,_fg} || exit 1
-    ) || touch $dir/.error &
   done
-  wait
-  [ -f $dir/.error ] && echo "$0: there was a problem while decoding" && exit 1
 fi
 
-if $test_online_decoding && [ $stage -le 16 ]; then
+if $test_online_decoding && [ $stage -eq 16 ]; then
   # note: if the features change (e.g. you add pitch features), you will have to
   # change the options of the following command line.
   steps/online/nnet3/prepare_online_decoding.sh \
     --mfcc-config conf/mfcc_hires.conf \
-    $lang exp/nnet3${nnet3_affix}/extractor ${dir} ${dir}_online
+    $lang $exp/nnet3${nnet3_affix}/extractor ${dir} ${dir}_online
 
-  rm $dir/.error 2>/dev/null || true
-
-  for data in $test_sets; do
-    (
-      data_affix=$(echo $data | sed s/test_//)
-      nj=$(wc -l <data/${data}_hires/spk2utt)
-      # note: we just give it "data/${data}" as it only uses the wav.scp, the
+  for test_set in $test_sets; do
+      #data_affix=$(echo $test_set | sed s/test_//)
+      nj=$(wc -l <$data/${test_set}_hires/spk2utt)
+      # note: we just give it "data/${test_set}" as it only uses the wav.scp, the
       # feature type does not matter.
-      for lmtype in csj_tg; do
+      for lmtype in combined_tg; do
         graph_dir=$gmm_dir/graph_${lmtype}
         steps/online/nnet3/decode.sh \
           --nj $nj --cmd "$decode_cmd" \
-          $graph_dir data/${data} ${dir}_online/decode_${lmtype}_${data_affix} || exit 1
+          $graph_dir $data/${test_set} ${dir}_online/decode_${test_set}_${lmtype} || exit 1
       done
-      #steps/lmrescore.sh --cmd "$decode_cmd" data/lang_test_{tgpr,tg} \
-      #  data/${data}_hires ${dir}_online/decode_{tgpr,tg}_${data_affix} || exit 1
-      #steps/lmrescore_const_arpa.sh --cmd "$decode_cmd" \
-      #  data/lang_test_bd_{tgpr,fgconst} \
-      # data/${data}_hires ${dir}_online/decode_${lmtype}_${data_affix}{,_fg} || exit 1
-    ) || touch $dir/.error &
   done
-  wait
-  [ -f $dir/.error ] && echo "$0: there was a problem while decoding" && exit 1
 fi
 
 
