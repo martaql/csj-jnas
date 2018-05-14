@@ -22,6 +22,7 @@ RESULTS_jnas
 RESULTS_jnas_old
 RESULTS
 ## log output files
+.*
 *.tmp
 *.out
 *.log
