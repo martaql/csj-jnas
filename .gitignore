@@ -15,9 +15,14 @@ s5/csj_mfcc
 s5/jnas_data
 s5/jnas_exp
 s5/jnas_mfcc
+## forced_alignment data, mfcc and experiemnts
+s5/forced_alignment/data
+s5/forced_alignment/make_mfcc
+s5/forced_alignment/tmp
+s5/forced_alignment/acoustic_model
 ## RESULTS files
 #RESULTS_marta
-#RESULTS_marta2
+RESULTS_marta2
 RESULTS_jnas
 RESULTS_jnas_old
 RESULTS

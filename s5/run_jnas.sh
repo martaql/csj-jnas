@@ -57,11 +57,11 @@ if  [ $stage -eq 4 ]; then
   # remove most of the repeated utterances, and
   # then take 7k random utterances from those (about ?hr ?mins)
   utils/subset_data_dir.sh --shortest \
-    $jnas_data/train_jnas 25000 $jnas_data/train_30kshort
+    $jnas_data/train_jnas 25000 $jnas_data/train_25kshort
   utils/subset_data_dir.sh \
-    $jnas_data/train_30kshort 7000 $jnas_data/train_7kshort
+    $jnas_data/train_25kshort 7000 $jnas_data/train_7kshort
 
-  # Take the first 100k utterances (about half the data); we'll use
+  # Take the first 25k utterances (about half the data); we'll use
   # this for later stages of training.
   utils/subset_data_dir.sh --first \
     $jnas_data/train_jnas 25000 $jnas_data/train_25k

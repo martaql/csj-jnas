@@ -1,9 +1,0 @@
-%WER 10.13 [ 2637 / 26028, 256 ins, 642 del, 1739 sub ] csj_exp/nnet3/tdnn_lstm1a_sp/decode_csj_tg_eval1/wer_14_0.0
-%WER 7.91 [ 2108 / 26661, 177 ins, 391 del, 1540 sub ] csj_exp/nnet3/tdnn_lstm1a_sp/decode_csj_tg_eval2/wer_14_0.0
-%WER 10.34 [ 1778 / 17189, 220 ins, 303 del, 1255 sub ] csj_exp/nnet3/tdnn_lstm1a_sp/decode_csj_tg_eval3/wer_15_0.0
-%WER 10.16 [ 2644 / 26028, 255 ins, 639 del, 1750 sub ] csj_exp/nnet3/tdnn_lstm1a_sp/decode_looped_csj_tg_eval1/wer_14_0.0
-%WER 7.85 [ 2094 / 26661, 196 ins, 354 del, 1544 sub ] csj_exp/nnet3/tdnn_lstm1a_sp/decode_looped_csj_tg_eval2/wer_12_0.0
-%WER 10.25 [ 1762 / 17189, 187 ins, 332 del, 1243 sub ] csj_exp/nnet3/tdnn_lstm1a_sp/decode_looped_csj_tg_eval3/wer_14_0.5
-%WER 10.04 [ 2612 / 26028, 238 ins, 648 del, 1726 sub ] csj_exp/nnet3/tdnn_lstm1a_sp_online/decode_csj_tg_eval1/wer_14_0.0
-%WER 7.84 [ 2090 / 26661, 156 ins, 422 del, 1512 sub ] csj_exp/nnet3/tdnn_lstm1a_sp_online/decode_csj_tg_eval2/wer_13_0.5
-%WER 10.34 [ 1778 / 17189, 183 ins, 335 del, 1260 sub ] csj_exp/nnet3/tdnn_lstm1a_sp_online/decode_csj_tg_eval3/wer_13_0.5

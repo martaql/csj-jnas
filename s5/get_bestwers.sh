@@ -32,7 +32,7 @@ echo " " >> RESULTS_marta
 echo "################## NNET3 Models ##################" >> RESULTS_marta
 
 exp=jnas_exp
-am_list="nnet3_csj/tdnn_lstm1a_sp nnet3/tdnn_lstm1a_sp" #nnet3/tdnn_lstm1a_sp_old nnet3/tdnn_lstm1a_sp_old_online nnet3_csj/tdnn_lstm1a_sp_online"
+am_list="nnet3_csj/tdnn_lstm1a_sp nnet3_csj/tdnn_lstm1a_sp_online nnet3/tdnn_lstm1a_sp nnet3/tdnn_lstm1a_sp_online" #nnet3/tdnn_lstm1a_sp_old nnet3/tdnn_lstm1a_sp_old_online nnet3_csj/tdnn_lstm1a_sp_online"
 #gmm_list="tri4_csj tri4_combined tri4_jnas"
 lm_list="csj_tg combined_tg jnas_tg"
 test_list="JNAS_testset_100 JNAS_testset_500 eval1 eval2 eval3"
@@ -47,7 +47,7 @@ for acoustic_model in $am_list; do
 	#for gmm in $gmm_list; do
           for test_num in $test_list; do
             #echo "< test set $test_num >" ;
-            for x in $exp/$acoustic_model/decode_${test_num}_${language_model}_*; do
+            for x in $exp/$acoustic_model/decode_${test_num}_${language_model}*; do
               [ -d $x ] && grep WER $x/wer_* | utils/best_wer.sh;
             done
           done
@@ -60,8 +60,9 @@ done >> RESULTS_marta
 
 exit 0;
 
-am_list="nnet3/tdnn_lstm1a_sp nnet3/tdnn_lstm1a_sp_online"
+am_list="nnet3/tdnn_lstm1a_sp nnet3/tdnn_lstm1a_sp_online dnn5b_pretrain-dbn_dnn dnn5b_pretrain-dbn_dnn_smbr dnn5b_pretrain-dbn_dnn_smbr_i1lats"
 for acoustic_model in $am_list; do
+  echo "=== Acoustic Model $acoustic_model ===" ;
   for x in csj_exp/$acoustic_model/decode_*; do
     [ -d $x ] && grep WER $x/wer_* | utils/best_wer.sh;
   done

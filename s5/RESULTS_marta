@@ -62,32 +62,80 @@
 === Acoustic Model nnet3_csj/tdnn_lstm1a_sp ===
 ================================================
 ---< Language Model csj_tg >---
-%WER 24.74 [ 3213 / 12989, 653 ins, 373 del, 2187 sub ] jnas_exp/nnet3_csj/tdnn_lstm1a_sp/decode_JNAS_testset_100_csj_tg_tri4_csj/wer_17_1.0
-%WER 26.06 [ 4794 / 18393, 992 ins, 504 del, 3298 sub ] jnas_exp/nnet3_csj/tdnn_lstm1a_sp/decode_JNAS_testset_500_csj_tg_tri4_csj/wer_17_1.0
+%WER 24.74 [ 3213 / 12989, 653 ins, 373 del, 2187 sub ] jnas_exp/nnet3_csj/tdnn_lstm1a_sp/decode_JNAS_testset_100_csj_tg/wer_17_1.0
+%WER 26.06 [ 4794 / 18393, 992 ins, 504 del, 3298 sub ] jnas_exp/nnet3_csj/tdnn_lstm1a_sp/decode_JNAS_testset_500_csj_tg/wer_17_1.0
 ---< Language Model combined_tg >---
-%WER 12.88 [ 1673 / 12989, 364 ins, 260 del, 1049 sub ] jnas_exp/nnet3_csj/tdnn_lstm1a_sp/decode_JNAS_testset_100_combined_tg_tri4_csj/wer_17_1.0
-%WER 13.11 [ 2411 / 18393, 472 ins, 380 del, 1559 sub ] jnas_exp/nnet3_csj/tdnn_lstm1a_sp/decode_JNAS_testset_500_combined_tg_tri4_csj/wer_17_1.0
-%WER 9.98 [ 2598 / 26028, 257 ins, 652 del, 1689 sub ] jnas_exp/nnet3_csj/tdnn_lstm1a_sp/decode_eval1_combined_tg_tri4_csj/wer_15_0.0
-%WER 7.93 [ 2113 / 26661, 184 ins, 376 del, 1553 sub ] jnas_exp/nnet3_csj/tdnn_lstm1a_sp/decode_eval2_combined_tg_tri4_csj/wer_13_0.0
-%WER 10.47 [ 1800 / 17189, 210 ins, 320 del, 1270 sub ] jnas_exp/nnet3_csj/tdnn_lstm1a_sp/decode_eval3_combined_tg_tri4_csj/wer_13_0.5
+%WER 12.88 [ 1673 / 12989, 364 ins, 260 del, 1049 sub ] jnas_exp/nnet3_csj/tdnn_lstm1a_sp/decode_JNAS_testset_100_combined_tg/wer_17_1.0
+%WER 13.11 [ 2411 / 18393, 472 ins, 380 del, 1559 sub ] jnas_exp/nnet3_csj/tdnn_lstm1a_sp/decode_JNAS_testset_500_combined_tg/wer_17_1.0
+%WER 9.98 [ 2598 / 26028, 257 ins, 652 del, 1689 sub ] jnas_exp/nnet3_csj/tdnn_lstm1a_sp/decode_eval1_combined_tg/wer_15_0.0
+%WER 7.93 [ 2113 / 26661, 184 ins, 376 del, 1553 sub ] jnas_exp/nnet3_csj/tdnn_lstm1a_sp/decode_eval2_combined_tg/wer_13_0.0
+%WER 10.47 [ 1800 / 17189, 210 ins, 320 del, 1270 sub ] jnas_exp/nnet3_csj/tdnn_lstm1a_sp/decode_eval3_combined_tg/wer_13_0.5
 ---< Language Model jnas_tg >---
-%WER 8.20 [ 1065 / 12989, 184 ins, 162 del, 719 sub ] jnas_exp/nnet3_csj/tdnn_lstm1a_sp/decode_JNAS_testset_100_jnas_tg_tri4_csj/wer_17_0.0
-%WER 8.02 [ 1476 / 18393, 282 ins, 207 del, 987 sub ] jnas_exp/nnet3_csj/tdnn_lstm1a_sp/decode_JNAS_testset_500_jnas_tg_tri4_csj/wer_17_0.0
+%WER 8.20 [ 1065 / 12989, 184 ins, 162 del, 719 sub ] jnas_exp/nnet3_csj/tdnn_lstm1a_sp/decode_JNAS_testset_100_jnas_tg/wer_17_0.0
+%WER 8.02 [ 1476 / 18393, 282 ins, 207 del, 987 sub ] jnas_exp/nnet3_csj/tdnn_lstm1a_sp/decode_JNAS_testset_500_jnas_tg/wer_17_0.0
+%WER 33.67 [ 8763 / 26028, 1222 ins, 1004 del, 6537 sub ] jnas_exp/nnet3_csj/tdnn_lstm1a_sp/decode_eval1_jnas_tg/wer_7_0.5
+%WER 30.62 [ 8163 / 26661, 1072 ins, 834 del, 6257 sub ] jnas_exp/nnet3_csj/tdnn_lstm1a_sp/decode_eval2_jnas_tg/wer_10_0.0
+%WER 30.43 [ 5231 / 17189, 713 ins, 732 del, 3786 sub ] jnas_exp/nnet3_csj/tdnn_lstm1a_sp/decode_eval3_jnas_tg/wer_10_0.0
+================================================
+=== Acoustic Model nnet3_csj/tdnn_lstm1a_sp_online ===
+================================================
+---< Language Model csj_tg >---
+%WER 24.61 [ 3197 / 12989, 680 ins, 353 del, 2164 sub ] jnas_exp/nnet3_csj/tdnn_lstm1a_sp_online/decode_JNAS_testset_100_csj_tg/wer_15_1.0
+%WER 26.02 [ 4785 / 18393, 1025 ins, 492 del, 3268 sub ] jnas_exp/nnet3_csj/tdnn_lstm1a_sp_online/decode_JNAS_testset_500_csj_tg/wer_16_1.0
+%WER 10.17 [ 2646 / 26028, 270 ins, 611 del, 1765 sub ] jnas_exp/nnet3_csj/tdnn_lstm1a_sp_online/decode_eval1_csj_tg/wer_12_0.0
+%WER 7.89 [ 2103 / 26661, 195 ins, 355 del, 1553 sub ] jnas_exp/nnet3_csj/tdnn_lstm1a_sp_online/decode_eval2_csj_tg/wer_12_0.0
+%WER 10.26 [ 1763 / 17189, 188 ins, 331 del, 1244 sub ] jnas_exp/nnet3_csj/tdnn_lstm1a_sp_online/decode_eval3_csj_tg/wer_14_0.5
+---< Language Model combined_tg >---
+%WER 12.77 [ 1659 / 12989, 361 ins, 257 del, 1041 sub ] jnas_exp/nnet3_csj/tdnn_lstm1a_sp_online/decode_JNAS_testset_100_combined_tg/wer_16_1.0
+%WER 13.23 [ 2433 / 18393, 486 ins, 379 del, 1568 sub ] jnas_exp/nnet3_csj/tdnn_lstm1a_sp_online/decode_JNAS_testset_500_combined_tg/wer_17_1.0
+%WER 9.98 [ 2597 / 26028, 261 ins, 637 del, 1699 sub ] jnas_exp/nnet3_csj/tdnn_lstm1a_sp_online/decode_eval1_combined_tg/wer_14_0.0
+%WER 7.93 [ 2113 / 26661, 177 ins, 396 del, 1540 sub ] jnas_exp/nnet3_csj/tdnn_lstm1a_sp_online/decode_eval2_combined_tg/wer_14_0.0
+%WER 10.45 [ 1796 / 17189, 209 ins, 308 del, 1279 sub ] jnas_exp/nnet3_csj/tdnn_lstm1a_sp_online/decode_eval3_combined_tg/wer_12_0.5
+---< Language Model jnas_tg >---
+%WER 8.51 [ 1106 / 12989, 192 ins, 168 del, 746 sub ] jnas_exp/nnet3_csj/tdnn_lstm1a_sp_online/decode_JNAS_testset_100_jnas_tg/wer_17_0.0
+%WER 8.29 [ 1524 / 18393, 297 ins, 204 del, 1023 sub ] jnas_exp/nnet3_csj/tdnn_lstm1a_sp_online/decode_JNAS_testset_500_jnas_tg/wer_17_0.0
+%WER 33.56 [ 8734 / 26028, 1200 ins, 1029 del, 6505 sub ] jnas_exp/nnet3_csj/tdnn_lstm1a_sp_online/decode_eval1_jnas_tg/wer_8_0.0
+%WER 30.45 [ 8119 / 26661, 1138 ins, 743 del, 6238 sub ] jnas_exp/nnet3_csj/tdnn_lstm1a_sp_online/decode_eval2_jnas_tg/wer_9_0.0
+%WER 30.15 [ 5182 / 17189, 747 ins, 661 del, 3774 sub ] jnas_exp/nnet3_csj/tdnn_lstm1a_sp_online/decode_eval3_jnas_tg/wer_9_0.0
 ================================================
 === Acoustic Model nnet3/tdnn_lstm1a_sp ===
 ================================================
 ---< Language Model csj_tg >---
-%WER 18.36 [ 2385 / 12989, 490 ins, 150 del, 1745 sub ] jnas_exp/nnet3/tdnn_lstm1a_sp/decode_JNAS_testset_100_csj_tg_tri5_combined/wer_8_0.5
-%WER 20.07 [ 3691 / 18393, 734 ins, 273 del, 2684 sub ] jnas_exp/nnet3/tdnn_lstm1a_sp/decode_JNAS_testset_500_csj_tg_tri5_combined/wer_10_1.0
+%WER 18.36 [ 2385 / 12989, 490 ins, 150 del, 1745 sub ] jnas_exp/nnet3/tdnn_lstm1a_sp/decode_JNAS_testset_100_csj_tg/wer_8_0.5
+%WER 20.07 [ 3691 / 18393, 734 ins, 273 del, 2684 sub ] jnas_exp/nnet3/tdnn_lstm1a_sp/decode_JNAS_testset_500_csj_tg/wer_10_1.0
+%WER 10.15 [ 2643 / 26028, 268 ins, 630 del, 1745 sub ] jnas_exp/nnet3/tdnn_lstm1a_sp/decode_eval1_csj_tg/wer_14_0.0
+%WER 7.84 [ 2091 / 26661, 211 ins, 345 del, 1535 sub ] jnas_exp/nnet3/tdnn_lstm1a_sp/decode_eval2_csj_tg/wer_12_0.0
+%WER 10.26 [ 1764 / 17189, 203 ins, 334 del, 1227 sub ] jnas_exp/nnet3/tdnn_lstm1a_sp/decode_eval3_csj_tg/wer_14_0.5
 ---< Language Model combined_tg >---
-%WER 3.58 [ 465 / 12989, 28 ins, 96 del, 341 sub ] jnas_exp/nnet3/tdnn_lstm1a_sp/decode_JNAS_testset_100_combined_tg_tri5_combined/wer_14_0.0
-%WER 4.31 [ 792 / 18393, 54 ins, 159 del, 579 sub ] jnas_exp/nnet3/tdnn_lstm1a_sp/decode_JNAS_testset_500_combined_tg_tri5_combined/wer_14_0.0
-%WER 10.05 [ 2616 / 26028, 260 ins, 659 del, 1697 sub ] jnas_exp/nnet3/tdnn_lstm1a_sp/decode_eval1_combined_tg_tri5_combined/wer_15_0.0
-%WER 7.91 [ 2108 / 26661, 190 ins, 387 del, 1531 sub ] jnas_exp/nnet3/tdnn_lstm1a_sp/decode_eval2_combined_tg_tri5_combined/wer_15_0.0
-%WER 10.63 [ 1827 / 17189, 238 ins, 323 del, 1266 sub ] jnas_exp/nnet3/tdnn_lstm1a_sp/decode_eval3_combined_tg_tri5_combined/wer_14_0.0
+%WER 3.58 [ 465 / 12989, 28 ins, 96 del, 341 sub ] jnas_exp/nnet3/tdnn_lstm1a_sp/decode_JNAS_testset_100_combined_tg/wer_14_0.0
+%WER 4.31 [ 792 / 18393, 54 ins, 159 del, 579 sub ] jnas_exp/nnet3/tdnn_lstm1a_sp/decode_JNAS_testset_500_combined_tg/wer_14_0.0
+%WER 10.05 [ 2616 / 26028, 260 ins, 659 del, 1697 sub ] jnas_exp/nnet3/tdnn_lstm1a_sp/decode_eval1_combined_tg/wer_15_0.0
+%WER 7.91 [ 2108 / 26661, 190 ins, 387 del, 1531 sub ] jnas_exp/nnet3/tdnn_lstm1a_sp/decode_eval2_combined_tg/wer_15_0.0
+%WER 10.63 [ 1827 / 17189, 238 ins, 323 del, 1266 sub ] jnas_exp/nnet3/tdnn_lstm1a_sp/decode_eval3_combined_tg/wer_14_0.0
 ---< Language Model jnas_tg >---
-%WER 3.50 [ 455 / 12989, 31 ins, 99 del, 325 sub ] jnas_exp/nnet3/tdnn_lstm1a_sp/decode_JNAS_testset_100_jnas_tg_tri5_combined/wer_17_0.0
-%WER 3.59 [ 661 / 18393, 52 ins, 144 del, 465 sub ] jnas_exp/nnet3/tdnn_lstm1a_sp/decode_JNAS_testset_500_jnas_tg_tri5_combined/wer_15_0.0
-%WER 32.52 [ 8464 / 26028, 1076 ins, 1024 del, 6364 sub ] jnas_exp/nnet3/tdnn_lstm1a_sp/decode_eval1_jnas_tg_tri5_combined/wer_10_0.0
-%WER 29.44 [ 7850 / 26661, 841 ins, 984 del, 6025 sub ] jnas_exp/nnet3/tdnn_lstm1a_sp/decode_eval2_jnas_tg_tri5_combined/wer_12_1.0
-%WER 29.46 [ 5064 / 17189, 683 ins, 706 del, 3675 sub ] jnas_exp/nnet3/tdnn_lstm1a_sp/decode_eval3_jnas_tg_tri5_combined/wer_11_0.0
+%WER 3.50 [ 455 / 12989, 31 ins, 99 del, 325 sub ] jnas_exp/nnet3/tdnn_lstm1a_sp/decode_JNAS_testset_100_jnas_tg/wer_17_0.0
+%WER 3.59 [ 661 / 18393, 52 ins, 144 del, 465 sub ] jnas_exp/nnet3/tdnn_lstm1a_sp/decode_JNAS_testset_500_jnas_tg/wer_15_0.0
+%WER 32.52 [ 8464 / 26028, 1076 ins, 1024 del, 6364 sub ] jnas_exp/nnet3/tdnn_lstm1a_sp/decode_eval1_jnas_tg/wer_10_0.0
+%WER 29.44 [ 7850 / 26661, 841 ins, 984 del, 6025 sub ] jnas_exp/nnet3/tdnn_lstm1a_sp/decode_eval2_jnas_tg/wer_12_1.0
+%WER 29.46 [ 5064 / 17189, 683 ins, 706 del, 3675 sub ] jnas_exp/nnet3/tdnn_lstm1a_sp/decode_eval3_jnas_tg/wer_11_0.0
+================================================
+=== Acoustic Model nnet3/tdnn_lstm1a_sp_online ===
+================================================
+---< Language Model csj_tg >---
+%WER 18.39 [ 2389 / 12989, 488 ins, 157 del, 1744 sub ] jnas_exp/nnet3/tdnn_lstm1a_sp_online/decode_JNAS_testset_100_csj_tg/wer_8_0.5
+%WER 20.07 [ 3692 / 18393, 718 ins, 289 del, 2685 sub ] jnas_exp/nnet3/tdnn_lstm1a_sp_online/decode_JNAS_testset_500_csj_tg/wer_11_1.0
+%WER 10.02 [ 2609 / 26028, 216 ins, 675 del, 1718 sub ] jnas_exp/nnet3/tdnn_lstm1a_sp_online/decode_eval1_csj_tg/wer_14_0.5
+%WER 7.71 [ 2055 / 26661, 185 ins, 376 del, 1494 sub ] jnas_exp/nnet3/tdnn_lstm1a_sp_online/decode_eval2_csj_tg/wer_14_0.0
+%WER 10.21 [ 1755 / 17189, 202 ins, 332 del, 1221 sub ] jnas_exp/nnet3/tdnn_lstm1a_sp_online/decode_eval3_csj_tg/wer_14_0.5
+---< Language Model combined_tg >---
+%WER 3.56 [ 462 / 12989, 28 ins, 94 del, 340 sub ] jnas_exp/nnet3/tdnn_lstm1a_sp_online/decode_JNAS_testset_100_combined_tg/wer_11_0.0
+%WER 4.34 [ 798 / 18393, 58 ins, 159 del, 581 sub ] jnas_exp/nnet3/tdnn_lstm1a_sp_online/decode_JNAS_testset_500_combined_tg/wer_14_0.0
+%WER 9.94 [ 2588 / 26028, 259 ins, 630 del, 1699 sub ] jnas_exp/nnet3/tdnn_lstm1a_sp_online/decode_eval1_combined_tg/wer_14_0.0
+%WER 7.82 [ 2085 / 26661, 166 ins, 395 del, 1524 sub ] jnas_exp/nnet3/tdnn_lstm1a_sp_online/decode_eval2_combined_tg/wer_13_0.5
+%WER 10.54 [ 1812 / 17189, 221 ins, 332 del, 1259 sub ] jnas_exp/nnet3/tdnn_lstm1a_sp_online/decode_eval3_combined_tg/wer_15_0.0
+---< Language Model jnas_tg >---
+%WER 3.47 [ 451 / 12989, 30 ins, 100 del, 321 sub ] jnas_exp/nnet3/tdnn_lstm1a_sp_online/decode_JNAS_testset_100_jnas_tg/wer_17_0.0
+%WER 3.62 [ 666 / 18393, 53 ins, 145 del, 468 sub ] jnas_exp/nnet3/tdnn_lstm1a_sp_online/decode_JNAS_testset_500_jnas_tg/wer_15_0.0
+%WER 32.48 [ 8454 / 26028, 1063 ins, 1021 del, 6370 sub ] jnas_exp/nnet3/tdnn_lstm1a_sp_online/decode_eval1_jnas_tg/wer_10_0.0
+%WER 29.43 [ 7847 / 26661, 843 ins, 982 del, 6022 sub ] jnas_exp/nnet3/tdnn_lstm1a_sp_online/decode_eval2_jnas_tg/wer_13_0.5
+%WER 29.45 [ 5062 / 17189, 672 ins, 703 del, 3687 sub ] jnas_exp/nnet3/tdnn_lstm1a_sp_online/decode_eval3_jnas_tg/wer_11_0.0

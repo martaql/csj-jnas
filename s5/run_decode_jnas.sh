@@ -10,8 +10,8 @@ load_model=false
 make_graph=false
 decode=false
 load_model_nnet3=false
-decode_nnet3=true
-decode_nnet3_online=false
+decode_nnet3=false
+decode_nnet3_online=true
 find_bestwer=true
 
 
@@ -19,36 +19,51 @@ find_bestwer=true
 # data directory:
 data_dir=jnas_data
 
+# Test sets to evaluate models on:
+test_list="JNAS_testset_100 JNAS_testset_500 eval1 eval2 eval3"
+#test_list="JNAS_testset_100 JNAS_testset_500"
+#test_list="eval2 eval3"
+#test_list="eval2 eval3 JNAS_testset_100 JNAS_testset_500"
+#test_list="JNAS_testset_100"
+#test_list="eval1"
+
 # language models:
-online_nnet3_lm_type=combined
 #lm_types="jnas_tg"
-lm_types="jnas_tg"
+#lm_types="csj_tg"
 #lm_types="csj_tg jnas_tg"
-#lm_types="jnas_tg combined_tg csj_tg"
+lm_types="combined_tg csj_tg jnas_tg"
 #lm_types="nosp_jnas_tg nosp_combined_tg nosp_csj_tg"
 
 # acoustic models:
 am_types="tri4_csj"
 #am_types="tri5_combined"
-#am_types="tri5_combined"
 #am_types="tri4_combined tri4_csj tri4_jnas"
 
-# experiment directories
-## exp_dir is also needed for nnet3 decoding to locate the graph!!
+# gmm-hmm decoding directories
+## before the exp_dir was declared here, 
+## now it is declared within the loops
 #gmm_type=tri4_combined
 #exp_dir=jnas_exp/${gmm_type}
-nnet3_gmm_type=tdnn_lstm1a_sp
+
+# nnet3 decoding directories
+## exp_dir is also needed when doing 
+## nnet3 decoding to locate the graph
+nnet3_am_type=tdnn_lstm1a_sp
 nnet3_dir=jnas_exp/nnet3_csj
-nnet3_exp_dir=$nnet3_dir/${nnet3_gmm_type}
+nnet3_exp_dir=$nnet3_dir/${nnet3_am_type}
 
-# Test sets to evaluate models on:
-#test_list="JNAS_testset_100 JNAS_testset_500 eval1 eval2 eval3"
-#test_list="JNAS_testset_100 JNAS_testset_500"
-test_list="eval1 eval2 eval3"
-#test_list="JNAS_testset_100 JNAS_testset_500 eval2 eval3"
-#test_list="JNAS_testset_100"
-#test_list="eval1"
+# nnet3 online decoding directories
+# language model for preparation of decoding:
+online_nnet3_lm_type=csj
+#online_nnet3_lm_type=combined
+online_nnet3_lang=jnas_data/lang_$online_nnet3_lm_type
+# extractor for prparation of decoding:
+online_nnet3_extractor=csj_exp/nnet3/extractor
+#online_nnet3_extractor=jnas_exp/nnet3/extractor
 
+
+# Prepare data directories
+# only needed at the very beginning
 if $prepare_data; then 
   jnas_data_prep.sh $jnas_test_list
 fi
@@ -144,15 +159,13 @@ if $decode_nnet3; then
           --nj $nj --cmd "$decode_cmd"  --num-threads 4 \
           --online-ivector-dir ${nnet3_dir}/ivectors_${test_set}_hires \
           $graph_dir $data_dir/${test_set}_hires \
-	  ${nnet3_exp_dir}/decode_${test_set}_${lmtype}_${am_type} \
+	  ${nnet3_exp_dir}/decode_${test_set}_${lmtype} \
 	  || exit 1;
       done
     done
   done
 fi
 
-online_nnet3_lang=jnas_data/lang_$online_nnet3_lm_type
-online_nnet3_extractor=csj_exp/nnet3/extractor
 if $decode_nnet3_online; then
   # note: if the features change (e.g. you add pitch features), 
   #you will have to change the options of the following command line.
@@ -164,6 +177,7 @@ if $decode_nnet3_online; then
   for am_type in $am_types; do
     exp_dir=jnas_exp/$am_type
     for lmtype in $lm_types; do
+      touch ${nnet3_exp_dir}_online/.${lmtype}
       graph_dir=$exp_dir/graph_${lmtype}
       for test_set in $test_list; do
         nj=$(wc -l <$data_dir/${test_set}_hires/spk2utt)
@@ -171,7 +185,9 @@ if $decode_nnet3_online; then
         # feature type does not matter.
         steps/online/nnet3/decode.sh \
           --nj $nj --cmd "$decode_cmd" \
-          $graph_dir $data_dir/${test_set} ${nnet3_exp_dir}_online/decode_${test_set}_${lmtype}_${am_type}
+          $graph_dir $data_dir/${test_set} \
+	  ${nnet3_exp_dir}_online/decode_${test_set}_${lmtype} \
+	  || exit 1;
       done
     done
   done
